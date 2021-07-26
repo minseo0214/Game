@@ -25,47 +25,34 @@ public class DragScript : MonoBehaviour,IBeginDragHandler, IDragHandler, IDropHa
         this.transform.position = currentPos;
     }
 
-
+    //우선 숫자값으로 했는데 화면 비율에 맞추도록 바꾸면 될거같아요.
+    // 경계값에 있을 때 다시 돌아가게 하려고 했는데, 이미지 크기에 따라 달라서
+    //이부분도 수정하시면 될듯합니다.
     void IDropHandler.OnDrop(PointerEventData eventData)
     {
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-        Debug.Log(mousePosition.x);
+        //Debug.Log(mousePosition.y);
+        //오른쪽
         if (mousePosition.x > -1)
         {
             currentImage.sprite = bigSprite;
         }
-        else
+        //창문
+        else if (mousePosition.x < -1 && mousePosition.y > 0)
+        {
+            Destroy(currentImage);
+        }
+        //왼쪽
+        else if (mousePosition.x < -1 && mousePosition.y < 0)
         {
             currentImage.sprite = smallSprite;
         }
-
-        transform.Translate(mousePosition);
-    }
-    
-    /*
-    void IEndDragHandler.OnEndDrag(PointerEventData eventData)//드래그 끝
-    {
-        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        this.transform.position = mousePosition;
-
-        /****
-        if (mousePosition == null)
-        {
-            this.transform.position = defaultposition;
-        }
-
+        //애매하면 돌아가기
         else
         {
-            this.transform.position = mousePosition;
-            if (mousePosition.x > 7368)
-            {
-                spriteRenderer.sprite = BigSprite;
-            }
-            else
-            {
-                spriteRenderer.sprite = SmallSprite;
-            }
+            mousePosition = defaultposition;
         }
-    }*/
+        transform.Translate(mousePosition);
+    }
 }
